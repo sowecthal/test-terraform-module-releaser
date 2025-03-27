@@ -1,0 +1,3 @@
+# Purpose
+
+Test `database` module
