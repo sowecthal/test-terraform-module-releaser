@@ -1,3 +1,0 @@
-# Purpose
-
-Test `database` module
