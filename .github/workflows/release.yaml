@@ -62,5 +62,8 @@ jobs:
               if [[ -f $usage_file ]]; then
                 echo "Changing tag for $module to $latestTag"
                 sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" $usage_file
+                git add . -v
+                git commit -m 'feat: update $module tag TEST-1234'
+                git push 
               fi
           done
