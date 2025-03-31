@@ -58,28 +58,21 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout ${{ github.head_ref }}
-
-          echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | \
-            jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' > all_modules.txt
-
+          git checkout ${{ github.head_ref }}          
           echo '${{ steps.terraform-module-release.outputs.changed-modules-map }}' | \
-            jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.nextTag)"' > changed_modules.txt
-
-          cat all_modules.txt changed_modules.txt | sort | uniq | while read -r module path tag; do
-            echo "Checking $module"
-            usage_file="$path/examples/usage.tf"
-            if [[ -f "$usage_file" ]]; then
-              echo "Changing tag for $module to $tag"
-              sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$tag\"|g" "$usage_file"
-              
-              if git diff --quiet "$usage_file"; then
-                echo "No changes detected for $module, skipping commit."
-              else
-                git add "$usage_file" -v
-                git commit -m "feat: update $module tag to $tag"
-                git push
+            jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' | \
+            while read -r module path latestTag; do
+              echo "Checking $module"
+              usage_file="$path/examples/usage.tf"
+              if [[ -f "$usage_file" ]]; then
+                echo "Changing tag for $module to $latestTag"
+                sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" "$usage_file"
+                if git diff --quiet "$usage_file"; then
+                  echo "No changes detected for $module, skipping commit."
+                else
+                  git add "$usage_file" -v
+                  git commit -m "feat: update $module tag to $latestTag"
+                  git push
+                fi
               fi
-            fi
           done
-
