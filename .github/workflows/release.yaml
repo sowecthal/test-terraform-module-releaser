@@ -54,7 +54,8 @@ jobs:
 
       - name: Debug step
         run: |
-          usage_file="$path/examples/usage.tf""
+          usage_file="$path/examples/usage.tf"
+          
           echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | \
             jq -r 'to_entries[] | \"\(.key) \(.value.path) \(.value.latestTag)"' | \
             while read -r module path latestTag; do
