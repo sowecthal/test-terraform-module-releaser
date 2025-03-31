@@ -55,15 +55,23 @@ jobs:
       - name: Debug step
         run: |
           echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | \
-            jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.latestTag)"' | \
+            jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' | \
             while read -r module path latestTag; do
               echo "Checking $module"
               usage_file="$path/examples/usage.tf"              
-              if [[ -f $usage_file ]]; then
+              if [[ -f "$usage_file" ]]; then
                 echo "Changing tag for $module to $latestTag"
-                sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" $usage_file
-                git add . -v
-                git commit -m 'feat: update $module tag TEST-1234'
-                git push 
+                sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" "$usage_file"
+
+                git config --global user.name "github-actions[bot]"
+                git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+                if git diff --quiet "$usage_file"; then
+                  echo "No changes detected for $module, skipping commit."
+                else
+                  git add "$usage_file"
+                  git commit -m "feat: update $module tag TEST-1234"
+                  git push
+                fi
               fi
           done
