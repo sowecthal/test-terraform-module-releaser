@@ -60,18 +60,18 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout ${{ github.head_ref }}          
           echo '${{ steps.terraform-module-release.outputs.changed-modules-map }}' | \
-            jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' | \
-            while read -r module path latestTag; do
+            jq -r 'to_entries[] | select(.value.nextTag != null) | "\(.key) \(.value.path) \(.value.nextTag)"' | \
+            while read -r module path nextTag; do
               echo "Checking $module"
               usage_file="$path/examples/usage.tf"
               if [[ -f "$usage_file" ]]; then
-                echo "Changing tag for $module to $latestTag"
-                sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" "$usage_file"
+                echo "Changing tag for $module to $nextTag"
+                sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g" "$usage_file"
                 if git diff --quiet "$usage_file"; then
                   echo "No changes detected for $module, skipping commit."
                 else
                   git add "$usage_file" -v
-                  git commit -m "feat: update $module tag to $latestTag"
+                  git commit -m "feat: update $module tag to $nextTag"
                   git push
                 fi
               fi
