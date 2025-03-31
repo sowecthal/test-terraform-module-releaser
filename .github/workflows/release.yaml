@@ -44,6 +44,8 @@ jobs:
           delete-legacy-tags: false
           # Whether to disable wiki generation for Terraform modules
           disable-wiki: false
+          # Module paths to completely ignore
+          module-path-ignore: "modules/**/examples/**"
           # File patterns to exclude from triggering version changes in Terraform modules
           module-change-exclude-patterns: .gitignore,*.md,*.tftest.hcl,tests/**
           # File patterns to exclude when bundling a Terraform module for tag/release
