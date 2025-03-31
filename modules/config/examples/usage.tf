@@ -1,3 +1,3 @@
 module "config" {
-  source = "git@github.com:sowecthal/test-terraform-module-releaser.git//modules/config?ref=1.1.1"
+  source = "git@github.com:sowecthal/test-terraform-module-releaser.git//modules/config?ref=modules/config/v0.0.3"
 }
