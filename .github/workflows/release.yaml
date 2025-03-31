@@ -54,7 +54,7 @@ jobs:
 
       - name: Debug step
         run: |
-          echo '${{ toJSON(steps.terraform-module-release.outputs.all-modules-map) }}' | jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.latestTag)"' | while read -r module path latestTag; do
+          echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.latestTag)"' | while read -r module path latestTag; do
               echo "Checking $path"
               if [ -f "$path/examples/usage.tf" ]; then
                   echo "Changing tag for $module to $latestTag"
