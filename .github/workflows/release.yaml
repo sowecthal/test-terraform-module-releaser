@@ -56,14 +56,14 @@ jobs:
 
       - name: Update examples/usage.tf
         run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout ${{ github.head_ref }}          
           echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | \
             jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' | \
             while read -r module path latestTag; do
               echo "Checking $module"
               usage_file="$path/examples/usage.tf"
-              git config --global user.name "github-actions[bot]"
-              git config --global user.email "github-actions[bot]@users.noreply.github.com"
-              git checkout ${{ github.head_ref }}              
               if [[ -f "$usage_file" ]]; then
                 echo "Changing tag for $module to $latestTag"
                 sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$latestTag\"|g" "$usage_file"
