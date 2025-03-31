@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Terraform Module Releaser
         uses: techpivot/terraform-module-releaser@v1.5.0
@@ -71,7 +73,7 @@ jobs:
                 else
                   git add "$usage_file"
                   git commit -m "feat: update $module tag TEST-1234"
-                  git push
+                  git push ${{ github.ref }}
                 fi
               fi
           done
