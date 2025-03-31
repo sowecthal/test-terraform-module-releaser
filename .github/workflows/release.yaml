@@ -68,13 +68,13 @@ jobs:
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-                git checkout feature/add-update-versions-action
+                git checkout ${{ github.head_ref }}
 
                 if git diff --quiet "$usage_file"; then
                   echo "No changes detected for $module, skipping commit."
                 else
                   git add "$usage_file" -v
-                  git commit -m "feat: update $module tag TEST-1234"
+                  git commit -m "feat: update $module tag to $latestTag"
                   git push
                 fi
               fi
