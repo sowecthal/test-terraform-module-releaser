@@ -60,12 +60,11 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout ${{ github.head_ref }}
 
-          echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | jq -r 'to_entries[] | \
-            select(.value.latestTag != null) | \
-            "\(.key) \(.value.path) \(.value.latestTag)"' > all_modules.txt
+          echo '${{ steps.terraform-module-release.outputs.all-modules-map }}' | \
+            jq -r 'to_entries[] | select(.value.latestTag != null) | "\(.key) \(.value.path) \(.value.latestTag)"' > all_modules.txt
 
-          echo '${{ steps.terraform-module-release.outputs.changed-modules-map }}' | jq -r 'to_entries[] | \
-            "\(.key) \(.value.path) \(.value.nextTag)"' > changed_modules.txt
+          echo '${{ steps.terraform-module-release.outputs.changed-modules-map }}' | \
+            jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.nextTag)"' > changed_modules.txt
 
           cat all_modules.txt changed_modules.txt | sort | uniq | while read -r module path tag; do
             echo "Checking $module"
