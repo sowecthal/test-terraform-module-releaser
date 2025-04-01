@@ -68,7 +68,7 @@ jobs:
                 echo "Changing tag for $module to $nextTag"
                 sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g" "$usage_file"
                 if git diff --quiet "$usage_file"; then
-                  echo "$usage_file is already updated to the latest version, skipping commit"
+                  echo "$usage_file is already updated to the latest version"
                 else
                   git add "$usage_file" -v
                   git commit -m "feat: update $module tag to $nextTag"
