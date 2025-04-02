@@ -2,6 +2,7 @@
 name: Update usage.tf after release
 on:
   release:
+    types: [created]
 
 jobs:
   update-usage:
