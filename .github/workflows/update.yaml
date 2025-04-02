@@ -2,8 +2,6 @@
 name: Update usage.tf after release
 on:
   release:
-    types: [published]
-    branches: [main]
 
 jobs:
   update-usage:
