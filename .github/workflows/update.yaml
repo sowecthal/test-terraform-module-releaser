@@ -1,5 +1,5 @@
 ---
-name: Update usage.tf after release
+name: Update usage.tf after tag
 
 on:
   push:
