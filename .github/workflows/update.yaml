@@ -20,10 +20,10 @@ jobs:
 
       - name: Update usage.tf
         run: |
-          tag="${GITHUB_REF##*/}"
+          tag="${GITHUB_REF}"
 
-          # Checkout tag in a new temporary branch
-          git checkout $tag -b update-tag-branch
+          # Checkout tag
+          git checkout $tag
           usage_file="examples/usage.tf"
           echo "Updating usage.tf for tag $tag"
           sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1${tag}\"|g" "$usage_file"
@@ -33,10 +33,11 @@ jobs:
           git tag -f "${tag}"
           git push --force origin "${tag}"
           
+          module_path="${GITHUB_REF%/*}"
           echo "Update usage.tf in main branch with tag $tag"
           git checkout main
           git pull origin main
-          usage_file="examples/usage.tf"
+          usage_file="$module_path/examples/usage.tf"
           sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1${tag}\"|g" "$usage_file"
           git add "$usage_file"
           git commit -m "Update usage.tf in main with tag ${tag}"
