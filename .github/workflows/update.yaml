@@ -1,0 +1,43 @@
+---
+name: Update usage.tf after release
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-usage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set git config
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+      - name: Update usage.tf
+        run: |
+          tag="${GITHUB_REF##*/}"
+
+          # Checkout tag in a new temporary branch
+          git checkout $tag -b update-tag-branch
+          usage_file="examples/usage.tf"
+          echo "Updating usage.tf for tag $tag"
+          sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1${tag}\"|g" "$usage_file"
+          git add "$usage_file"
+          git commit -m "Update usage.tf with tag ${tag}"
+          # Force-update tag
+          git tag -f "${tag}"
+          git push --force origin "${tag}"
+          
+          echo "Update usage.tf in main branch with tag $tag"
+          git checkout main
+          git pull origin main
+          usage_file="examples/usage.tf"
+          sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1${tag}\"|g" "$usage_file"
+          git add "$usage_file"
+          git commit -m "Update usage.tf in main with tag ${tag}"
+          git push origin main
