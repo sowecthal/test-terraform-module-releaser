@@ -33,7 +33,7 @@ jobs:
       - name: Update usage.tf for the tagged module
         run: |
           git checkout "${{ env.full_tag }}"
-          usage_file="examples/usage.tf"
+          usage_file="${{ env.module_path }}/examples/usage.tf"
 
           echo "Updating usage.tf for tag ${{ env.full_tag }}"
           sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1${{ env.full_tag }}\"|g" "$usage_file"
