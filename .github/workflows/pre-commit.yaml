@@ -1,8 +1,10 @@
 ---
 name: pre-commit
 on:
-  pull_request:
-    types: [opened, synchronize]
+  workflow_run:
+    workflows: ["release.yaml"]
+    types:
+      - completed
 
 jobs:
   pre-commit:
