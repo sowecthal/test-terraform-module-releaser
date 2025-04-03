@@ -14,4 +14,10 @@ jobs:
           fetch-depth: 0
 
       - name: Run pre-commit checks
-        uses: pre-commit/action@v3.0.1
+        uses: saritasa-nest/saritasa-github-actions/.github/actions/pre-commit@v3.4
+        with:
+          ignore-commit-authors: github-actions
+          node-version: '20'
+          python-version: '3.x'
+          tools-list: |
+            terraform-docs=https://github.com/terraform-docs/terraform-docs/releases/download/v0.19.0/terraform-docs-v0.19.0-linux-amd64.tar.gz

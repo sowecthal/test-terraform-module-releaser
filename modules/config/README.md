@@ -5,7 +5,7 @@
 
 ```hcl
 module "config" {
-  source = "git@github.com:sowecthal/test-terraform-module-releaser.git//modules/config?ref=modules/config/v0.0.3"
+  source = "git@github.com:sowecthal/test-terraform-module-releaser.git//modules/config?ref=$nextTag"
 }
 ```
 

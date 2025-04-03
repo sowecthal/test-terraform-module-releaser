@@ -65,7 +65,7 @@ jobs:
               echo "Checking $module"
               usage_file="$path/examples/usage.tf"
               echo "Changing tag for $module to $nextTag"
-              sed -Ei 's|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g' "$usage_file"
+              sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g" "$usage_file"
               if git diff --quiet "$usage_file"; then
                 echo "$usage_file is already updated to the latest version"
               else
