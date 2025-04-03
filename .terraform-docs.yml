@@ -1,0 +1,44 @@
+formatter: markdown
+header-from: main.tf
+footer-from: ../../.docs/.footer.md
+
+recursive:
+  enabled: true
+  path: modules
+  include-main: false
+
+settings:
+  lockfile: false
+
+sort:
+  enabled: true
+  by: name
+
+content: |-
+  {{ .Header }}
+
+  ## Usage
+
+  ```hcl
+  {{ include "examples/usage.tf" }}
+  ```
+
+  {{ .Inputs }}
+
+  {{ .Outputs }}
+
+  {{ .Providers }}
+
+  ## License
+
+  {{ include "../../.docs/license.md" }}
+
+  {{ .Footer }}
+
+output:
+  file: README.md
+  mode: inject
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
