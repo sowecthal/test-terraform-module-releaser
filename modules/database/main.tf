@@ -3,6 +3,6 @@ module "database" {
 
   tags = {
     database = var.database
-    test = test
+    test     = test
   }
 }

@@ -1,0 +1,155 @@
+---
+# if you get errors
+# The unauthenticated git protocol on port 9418 is no longer supported.
+# solution:
+# git config --global url."https://".insteadOf git://
+default_install_hook_types:
+  - pre-commit
+  - pre-push
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.97.4
+    hooks:
+      - id: terraform_fmt
+        stages:
+          - pre-commit
+          - pre-push
+        args:
+          - --args=-diff
+          - --args=-write=true
+  - repo: https://github.com/terraform-docs/terraform-docs
+    rev: v0.19.0
+    hooks:
+      # Causes failure if documentation was out-of-date
+      - id: terraform-docs-go
+        args:
+          - --output-check
+          - .
+      # Generates up-to-date documentation
+      - id: terraform-docs-go
+        args:
+          - .
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        stages:
+          - pre-commit
+          - pre-push
+      - id: check-case-conflict
+        stages:
+          - pre-commit
+          - pre-push
+      - id: check-executables-have-shebangs
+        stages:
+          - pre-commit
+          - pre-push
+      - id: check-merge-conflict
+        stages:
+          - pre-commit
+          - pre-push
+      - id: check-symlinks
+        stages:
+          - pre-commit
+          - pre-push
+      - id: check-shebang-scripts-are-executable
+      - id: check-toml
+        stages:
+          - pre-commit
+          - pre-push
+      - id: detect-aws-credentials
+        stages:
+          - pre-commit
+          - pre-push
+        args:
+          - --allow-missing-credentials
+      - id: destroyed-symlinks
+        stages:
+          - pre-commit
+          - pre-push
+      - id: double-quote-string-fixer
+        stages:
+          - pre-commit
+          - pre-push
+      - id: end-of-file-fixer
+        stages:
+          - pre-commit
+          - pre-push
+      - id: file-contents-sorter
+        stages:
+          - pre-commit
+          - pre-push
+        files: \.(gitignore|ignore)
+        args:
+          - --unique
+      - id: forbid-new-submodules
+        stages:
+          - pre-commit
+          - pre-push
+      # - id: no-commit-to-branch
+      #   stages:
+      #     - pre-commit
+      #     - pre-push
+      - id: mixed-line-ending
+        stages:
+          - pre-commit
+          - pre-push
+        args:
+          - --fix=auto
+      - id: trailing-whitespace
+        stages:
+          - pre-commit
+          - pre-push
+        args:
+          - --markdown-linebreak-ext=md
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        stages:
+          - pre-commit
+          - pre-push
+        files: \.(markdown|md|)$
+        exclude: ^(modules)/(.*)/README.md
+        additional_dependencies:
+          - prettier
+          - prettier-plugin-sh
+          - prettier-plugin-toml
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.17.2
+    hooks:
+      - id: markdownlint-cli2
+        stages:
+          - pre-commit
+          - pre-push
+        name: markdownlint-cli2
+        description: Checks the style of Markdown/CommonMark files.
+        language: node
+        types:
+          - markdown
+        minimum_pre_commit_version: 0.15.0
+  - repo: https://github.com/lyz-code/yamlfix/
+    rev: 1.16.1
+    hooks:
+      - id: yamlfix
+        args:
+          - --config-file
+          - .yamlfix.toml
+        files: ^(.markdownlint.yaml|.pre-commit-config.yaml)$
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.4.1
+    hooks:
+      - id: codespell
+        stages:
+          - pre-commit
+          - pre-push
+        args:
+          - --ignore-words=.codespellignore
+  - repo: https://github.com/erskaggs/jira-pre-commit
+    rev: v1.0.4
+    hooks:
+      - id: jira-pre-commit
+        stages:
+          - commit-msg
+ci:
+  autoupdate_schedule: monthly
