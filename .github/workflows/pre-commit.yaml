@@ -2,7 +2,7 @@
 name: pre-commit
 on:
   workflow_run:
-    workflows: ["release.yaml"]
+    workflows: [terraform-module-release]
     types:
       - completed
 
