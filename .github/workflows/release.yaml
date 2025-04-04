@@ -54,7 +54,7 @@ jobs:
           # File patterns to exclude when bundling a Terraform module for tag/release
           module-asset-exclude-patterns: .gitignore,*.md,*.tftest.hcl,tests/**
 
-      - name: Update examples/usage.tf
+      - name: Update examples/usage.tf and README.md
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
@@ -64,12 +64,13 @@ jobs:
             while read -r module path nextTag; do
               echo "Checking $module"
               usage_file="$path/examples/usage.tf"
-              echo "Changing tag for $module to $nextTag"
-              sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g" "$usage_file"
+              readme_file="$path/README.md"
+              echo "Changing tag for $module to be $nextTag"
+              sed -Ei "s|(source = \"git[^?]+\?ref=).*|\1$nextTag\"|g" "$usage_file" "$readme_file"
               if git diff --quiet "$usage_file"; then
                 echo "$usage_file is already updated to the latest version"
               else
-                git add "$usage_file" -v
+                git add "$usage_file" "$readme_file" -v
                 git commit -m "feat: update $module tag to $nextTag"
                 git push
               fi
