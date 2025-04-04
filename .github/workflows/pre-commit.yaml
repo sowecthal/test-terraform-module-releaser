@@ -1,7 +1,11 @@
 ---
 name: pre-commit
 on:
-  pull_request:
+  workflow_run:
+    workflows:
+      - terraform-module-release
+    types:
+      - completed
 
 jobs:
   pre-commit:
