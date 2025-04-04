@@ -55,6 +55,7 @@ jobs:
           module-asset-exclude-patterns: .gitignore,*.md,*.tftest.hcl,tests/**
 
       - name: Update examples/usage.tf and README.md
+        if: github.event.pull_request.merged == true
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
