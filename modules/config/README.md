@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# Module `config`
+# Module `config` config config
 
 ## Usage
 

@@ -1,3 +1,3 @@
 /**
- * # Module `config`
+ * # Module `config` config config
  */
