@@ -1,5 +1,5 @@
 <!-- BEGIN_TF_DOCS -->
-# Module `database` lalala
+# Module `database`
 
 ## Usage
 

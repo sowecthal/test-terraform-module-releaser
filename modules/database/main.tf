@@ -1,3 +1,3 @@
 /**
- * # Module `database` lalala
+ * # Module `database`
  */
