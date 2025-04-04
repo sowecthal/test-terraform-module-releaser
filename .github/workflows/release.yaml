@@ -59,7 +59,9 @@ jobs:
         run: |
           git config --global user.name 'github-actions'
           git config --global user.email 'github-actions@users.noreply.github.com'
-          git checkout ${{ github.head_ref }}
+          git fetch origin main
+          git checkout main
+          git pull origin main
           echo '${{ steps.terraform-module-release.outputs.changed-modules-map }}' | \
             jq -r 'to_entries[] | "\(.key) \(.value.path) \(.value.nextTag)"' | \
             while read -r module path nextTag; do
