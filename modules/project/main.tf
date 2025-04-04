@@ -1,3 +1,3 @@
 /**
- * # Module `project`
+ * # Module `project` lalala
  */
